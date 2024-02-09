@@ -15,8 +15,8 @@ provider "aws" {
 }
 
 # Create security group for access to EC2 from your Anywhere
-resource "aws_security_group" "sde_security_group" {
-  name        = "sde_security_group"
+resource "aws_security_group" "aim_security_group" {
+  name        = "aim_security_group"
   description = "Security group to allow inbound SCP & outbound 8080 (Airflow) connections"
 
   ingress {
@@ -42,7 +42,7 @@ resource "aws_security_group" "sde_security_group" {
   }
 
   tags = {
-    Name = "sde_security_group"
+    Name = "aim_security_group"
   }
 }
 
@@ -73,14 +73,14 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "sde_ec2" {
+resource "aws_instance" "aim_ec2" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
 
   key_name        = aws_key_pair.generated_key.key_name
-  security_groups = [aws_security_group.sde_security_group.name]
+  security_groups = [aws_security_group.aim_security_group.name]
   tags = {
-    Name = "sde_ec2"
+    Name = "aim_ec2"
   }
 
   user_data = <<EOF
@@ -112,8 +112,8 @@ sudo apt install make
 echo 'Clone git repo to EC2'
 cd /home/ubuntu && git clone ${var.repo_url}
 
-echo 'CD to data_engineering_project_template directory'
-cd data_engineering_project_template
+echo 'CD to projects directory'
+cd projects
 
 echo 'Start containers & Run db migrations'
 make up

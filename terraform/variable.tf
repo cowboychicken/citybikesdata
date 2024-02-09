@@ -9,14 +9,14 @@ variable "aws_region" {
 variable "key_name" {
   description = "EC2 key name"
   type        = string
-  default     = "sde-key"
+  default     = "aim-key"
 }
 
 ## EC2 instance type
 variable "instance_type" {
   description = "Instance type for EMR and EC2"
   type        = string
-  default     = "t2.small"
+  default     = "t3.small"
 }
 
 ## Alert email receiver
