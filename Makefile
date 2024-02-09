@@ -7,10 +7,13 @@ docker-spin-up:
 perms:
 	sudo mkdir -p logs plugins temp dags tests migrations && sudo chmod -R u=rwx,g=rwx,o=rwx logs plugins temp dags tests migrations
 
-up: perms docker-spin-up warehouse-migration
+up: perms docker-spin-up sleeper warehouse-migration
 
 down:
 	docker compose down
+
+sleeper:
+	sleep 15
 
 sh:
 	docker exec -ti webserver bash
@@ -57,10 +60,10 @@ db-migration:
 	@read -p "Enter migration name:" migration_name; docker exec webserver yoyo new ./migrations -m "$$migration_name"
 
 warehouse-migration:
-	docker exec webserver yoyo develop --no-config-file --database postgres://sdeuser:sdepassword1234@warehouse:5432/finance ./migrations
+	docker exec webserver yoyo develop --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations
 
 warehouse-rollback:
-	docker exec webserver yoyo rollback --no-config-file --database postgres://sdeuser:sdepassword1234@warehouse:5432/finance ./migrations
+	docker exec webserver yoyo rollback --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations
 
 ####################################################################################################################
 # Port forwarding to local machine

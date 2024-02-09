@@ -40,7 +40,8 @@ version: '3'
 x-airflow-common:
   &airflow-common
   build:
-    context: ./containers/airflow/
+    context: ./
+    dockerfile: ./containers/airflow/Dockerfile
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -54,7 +55,7 @@ x-airflow-common:
     WAREHOUSE_PASSWORD: ${POSTGRES_PASSWORD}
     WAREHOUSE_DB: ${POSTGRES_DB}
     WAREHOUSE_HOST: ${POSTGRES_HOST}
-    WARREHOUSE_PORT: ${POSTGRES_PORT}
+    WAREHOUSE_PORT: ${POSTGRES_PORT}
 
   volumes:
     - ./dags:/opt/airflow/dags
@@ -141,7 +142,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_DATABSE: ${POSTGRES_DB}
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ]
       interval: 5s

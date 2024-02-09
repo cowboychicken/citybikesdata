@@ -16,7 +16,7 @@ variable "key_name" {
 variable "instance_type" {
   description = "Instance type for EMR and EC2"
   type        = string
-  default     = "m4.xlarge"
+  default     = "t2.small"
 }
 
 ## Alert email receiver
@@ -30,5 +30,5 @@ variable "alert_email_id" {
 variable "repo_url" {
   description = "Repository url to clone into production machine"
   type        = string
-  default     = "https://github.com/cowboychicken/DE-infra-template"
+  default     = "https://github.com/cowboychicken/citybikesdata"
 }
