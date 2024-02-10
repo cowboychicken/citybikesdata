@@ -16,7 +16,7 @@ variable "key_name" {
 variable "instance_type" {
   description = "Instance type for EMR and EC2"
   type        = string
-  default     = "t3.medium"
+  default     = "t3.small"
 }
 
 ## Alert email receiver

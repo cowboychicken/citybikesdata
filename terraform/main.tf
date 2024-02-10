@@ -112,7 +112,7 @@ sudo apt install make
 echo 'Clone git repo to EC2'
 cd /home/ubuntu && git clone ${var.repo_url}
 
-echo 'CD to projects directory'
+echo 'CD to project directory'
 cd citybikesdata
 
 echo 'Start containers & Run db migrations'

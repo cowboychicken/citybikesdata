@@ -2,6 +2,8 @@ ETL project using Citybikes API
 
 Tools:
     - Airflow
-    - Metabase
-    - Pandas
     - Docker
+    - Pandas
+    - Metabase
+    - Terraform / AWS ec2
+
