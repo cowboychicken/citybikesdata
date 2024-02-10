@@ -15,4 +15,4 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           #SOURCE: "./"
           TARGET: "/home/ubuntu/citybikesdata"
-          ARGS: "-rlgoDzvt -i "
+          ARGS: "-rlgoDz -v -i "
