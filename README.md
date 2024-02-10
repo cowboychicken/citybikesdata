@@ -7,5 +7,5 @@ Tools:
     - Metabase
     - Terraform / AWS ec2
     - YOsdjkks
-    -YO
+    -YOasd
 
