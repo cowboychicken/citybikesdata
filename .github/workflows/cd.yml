@@ -16,6 +16,6 @@ jobs:
           SOURCE: "./"
           TARGET: "/home/ubuntu/citybikesdata"
           #ARGS: "-rlgoDz -v -i "
-          SCRIPT_BEFORE: |
-            whoami
-            sudo su
+          #SCRIPT_BEFORE: |
+          #  whoami
+          #  sudo su
