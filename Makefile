@@ -1,8 +1,8 @@
 ####################################################################################################################
-# Setup containers to run Airflow
+# Setup containers
 
 docker-spin-up:
-	docker compose --env-file env up airflow-init && docker compose --env-file env up --build -d
+	docker compose --env-file env up --build -d
 
 perms:
 	sudo mkdir -p logs plugins temp dags tests migrations && sudo chmod -R u=rwx,g=rwx,o=rwx logs plugins temp dags tests migrations
@@ -16,25 +16,25 @@ sleeper:
 	sleep 15
 
 sh:
-	docker exec -ti webserver bash
+	docker exec -ti pipelinerunner bash
 
 ####################################################################################################################
 # Testing, auto formatting, type checks, & Lint checks
 
 pytest:
-	docker exec webserver pytest -p no:warnings -v /opt/airflow/tests
+	docker exec pipelinerunner pytest -p no:warnings -v /opt/airflow/tests
 
 format:
-	docker exec webserver python -m black -S --line-length 79 .
+	docker exec pipelinerunner python -m black -S --line-length 79 .
 
 isort:
-	docker exec webserver isort .
+	docker exec pipelinerunner isort .
 
 type:
-	docker exec webserver mypy --ignore-missing-imports /opt/airflow
+	docker exec pipelinerunner mypy --ignore-missing-imports /opt/airflow
 
 lint: 
-	docker exec webserver flake8 /opt/airflow/dags
+	docker exec pipelinerunner flake8 /opt/airflow/dags
 
 ci: isort format type lint pytest
 
@@ -57,13 +57,13 @@ infra-config:
 # Create tables in Warehouse
 
 db-migration:
-	@read -p "Enter migration name:" migration_name; docker exec webserver yoyo new ./migrations -m "$$migration_name"
+	@read -p "Enter migration name:" migration_name; docker exec pipelinerunner yoyo new ./migrations -m "$$migration_name"
 
 warehouse-migration:
-	docker exec webserver yoyo develop --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations
+	docker exec pipelinerunner yoyo develop --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations
 
 warehouse-rollback:
-	docker exec webserver yoyo rollback --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations
+	docker exec pipelinerunner yoyo rollback --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations
 
 ####################################################################################################################
 # Port forwarding to local machine

@@ -26,7 +26,7 @@ def get_stations_for(network_id):
     return response.json()
 
 
-def main():
+def run():
     with DBConnection(db_creds()).conn as conn:
         try:
             with conn.cursor() as curs:
@@ -37,4 +37,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run()

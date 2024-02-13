@@ -113,9 +113,9 @@ def load_station_data_to_edw():
                 except Exception as e:
                     print(logging.error(traceback.format_exc()))
 
-def main():
+def run():
     load_network_data_to_edw()
     load_station_data_to_edw()
 
 if __name__ == "__main__":
-    main()
+    run()
