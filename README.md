@@ -6,6 +6,4 @@ Tools:
     - Pandas
     - Metabase
     - Terraform / AWS ec2
-    - YOsdjkks
-    -YOasd
 

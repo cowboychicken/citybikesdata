@@ -7,6 +7,8 @@ jobs:
   deploy-to-ec2:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out
+        uses: actions/checkout@main 
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -14,7 +16,4 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SOURCE: "./"
-          TARGET: "/home/ubuntu/citybikesdata"
-          #ARGS: "-rlgoDz -v -i "
-          SCRIPT_BEFORE: |
-            ls
+          TARGET: ${{ secrets.REMOTE_TARGET }}
