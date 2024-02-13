@@ -4,6 +4,8 @@ FROM python:3.9.5
 WORKDIR /code
 ENV PYTHONPATH=/code/src
 
+RUN sudo su
+
 # install cron
 RUN apt-get update && apt-get install cron -y
 
