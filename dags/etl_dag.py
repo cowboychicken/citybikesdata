@@ -1,5 +1,5 @@
 import citybikesdata.extract as extract
-import citybikesdata.transform as transform
+import citybikesdata.load as load
 
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
@@ -14,11 +14,11 @@ def citybikes_etl_dag():
 
     @task(task_id="process_networks")
     def process_networks(ds=None, **kwargs):
-        return transform.load_network_data_to_edw()
+        return load.network_data_to_edw()
 
     @task(task_id="process_stations")
     def process_stations(ds=None, **kwargs):
-        return transform.load_station_data_to_edw()
+        return load.station_data_to_edw()
 
     #dummytask = extract_from_api()
     #dummytask = process_networks()
