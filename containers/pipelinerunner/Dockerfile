@@ -16,8 +16,8 @@ COPY ./ /code/
 
 # ref: https://stackoverflow.com/questions/37458287/how-to-run-a-cron-job-inside-a-docker-container
 # Copy pull_bitcoin_exchange_info file to the cron.d directory
-#COPY /scheduler/pull_api_info /etc/cron.d/pull_api_info
-#COPY /scheduler/load_to_edw /etc/cron.d/load_to_edw
+COPY /scheduler/pull_api_info /etc/cron.d/pull_api_info
+COPY /scheduler/load_to_edw /etc/cron.d/load_to_edw
 COPY /scheduler/cron_driver /etc/cron.d/cron_driver
 
 # Give execution rights on the cron job
