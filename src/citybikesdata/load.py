@@ -19,9 +19,10 @@ def networks_to_edw():
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
-    # response == a DB ENTRY, so need to choose correct index/tuple(column), then select key from resulting dict
+    # response == a DB ENTRY/ROW, so need to choose correct index/tuple(column), then select key from resulting dict
+    file_count = 0
     for update in networks_updates:
-
+    
         df_fromjson = pd.DataFrame(update[0].get('networks'))
         df_fromjson['dateApiCalled'] = update[2]
 
@@ -49,9 +50,6 @@ def networks_to_edw():
         tuples = [tuple(x) for x in df_differences.to_numpy()]
         columns = ','.join(list(df_differences.columns))
 
-        print("columns")
-        print(columns)
-        print('\n\n')
         for row in tuples:
             with DBConnection(db_creds()).conn as conn:
                 try:
@@ -60,6 +58,8 @@ def networks_to_edw():
                         curs.execute(query_string, (row,))
                 except Exception as e:
                     print(logging.error(traceback.format_exc()))
+        file_count += 1
+    print("[load.networks_to_edw()] " + str(file_count) + " files proccessed.")
 
 
 def station_to_edw():
@@ -72,7 +72,8 @@ def station_to_edw():
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
-    print ("starting station transformations......") 
+    
+    file_count = 0
     for update in station_updates:
         df_fromjson = pd.DataFrame(update[0]['network'].get('stations'))
         df_fromjson['network'] = 'fortworth'
@@ -114,6 +115,8 @@ def station_to_edw():
                         curs.execute(query_string, (row,))
                 except Exception as e:
                     print(logging.error(traceback.format_exc()))
+        file_count += 1
+    print(print("[load.stations_to_edw()] " + str(file_count) + " files proccessed."))
 
 def run():
     networks_to_edw()
