@@ -14,11 +14,11 @@ def citybikes_etl_dag():
 
     @task(task_id="process_networks")
     def process_networks(ds=None, **kwargs):
-        return load.network_data_to_edw()
+        return load.network_to_edw()
 
     @task(task_id="process_stations")
     def process_stations(ds=None, **kwargs):
-        return load.station_data_to_edw()
+        return load.station_to_edw()
 
     #dummytask = extract_from_api()
     #dummytask = process_networks()

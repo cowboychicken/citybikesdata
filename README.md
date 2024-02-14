@@ -20,9 +20,9 @@ Immediate To-Do:
     - DB Schema
         - add date-proccessed to edl
             OR/And add edl dateadded to edw entry to remove duplicates, or compare with 
-            
+                ** 
 
-        - change edl name to just edl
+        - change edl name to just edl, networks, stations....
         
 
 

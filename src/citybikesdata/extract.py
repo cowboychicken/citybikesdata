@@ -30,8 +30,8 @@ def run():
     with DBConnection(db_creds()).conn as conn:
         try:
             with conn.cursor() as curs:
-                curs.execute("INSERT INTO citybikes.citybikesedl2 (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_networks()),"networks" ))
-                curs.execute("INSERT INTO citybikes.citybikesedl2 (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_stations_for("fortworth")),"fortworth" ))
+                curs.execute("INSERT INTO citybikes.edl (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_networks()),"networks" ))
+                curs.execute("INSERT INTO citybikes.edl (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_stations_for("fortworth")),"fortworth" ))
         except Exception as e:
             print(logging.error(traceback.format_exc()))
 

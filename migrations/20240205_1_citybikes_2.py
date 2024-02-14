@@ -9,17 +9,18 @@ __depends__ = {"20240205_1_citybikes_1"}
 steps = [
     step(
         """
-        CREATE TABLE citybikes.citybikesedl2
+        CREATE TABLE citybikes.edl
         (
             responsejson jsonb,
-            messagesent text
+            messagesent text,
+            dateAdded timestamp default current_timestamp
         )
         """,
-        "DROP TABLE citybikes.citybikesedl2",
+        "DROP TABLE citybikes.edl",
     ),
     step(
         """
-        CREATE TABLE citybikes.networkraw
+        CREATE TABLE citybikes.networks
         (
             id text, 
             href text,
@@ -33,25 +34,26 @@ steps = [
             dateAdded timestamp default current_timestamp
         )
         """,
-        "DROP TABLE citybikes.networkraw",
+        "DROP TABLE citybikes.networks",
     ),
     step(
         """
-        CREATE TABLE citybikes.stationraw
+        CREATE TABLE citybikes.stations
         (         
             id text,
             name text,
             extra text,
-            latitude text,
-            longitude text,
-            timestamp text,
+            latitude float,
+            longitude float,
+            timestamp timestamp,
             free_bikes int,
             empty_slots int,
             network text,
+            dateApiCalled timestamp,
             dateAdded timestamp default current_timestamp
         )
         """,
-        "DROP TABLE citybikes.stationraw",
+        "DROP TABLE citybikes.stations",
     ),
 ]
 

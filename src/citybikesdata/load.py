@@ -8,13 +8,13 @@ from citybikesdata.utils.db_config import get_db_creds as db_creds
 
 
 # Processing CityBikes EDL 
-def network_data_to_edw():
+def networks_to_edw():
 
     networks_updates = None
     with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.citybikesedl2 WHERE messagesent='networks';")
+                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='networks';")
                     networks_updates = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
@@ -29,7 +29,7 @@ def network_data_to_edw():
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.networkraw;")
+                    curs.execute("SELECT * FROM citybikes.networks;")
                     db_query_results = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
@@ -55,18 +55,18 @@ def network_data_to_edw():
             with DBConnection(db_creds()).conn as conn:
                 try:
                     with conn.cursor() as curs:
-                        query_string = "INSERT INTO citybikes.networkraw (" + columns + ") VALUES %s;"
+                        query_string = "INSERT INTO citybikes.networks (" + columns + ") VALUES %s;"
                         curs.execute(query_string, (row,))
                 except Exception as e:
                     print(logging.error(traceback.format_exc()))
 
 
-def station_data_to_edw():
+def station_to_edw():
     station_updates = None 
     with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.citybikesedl2 WHERE messagesent='fortworth';")
+                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='fortworth';")
                     station_updates = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
@@ -75,13 +75,14 @@ def station_data_to_edw():
     for update in station_updates:
         df_fromjson = pd.DataFrame(update[0]['network'].get('stations'))
         df_fromjson['network'] = 'fortworth'
+        df_fromjson['dateApiCalled'] = update[2]
 
         db_query_results = None
 
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.stationraw;")
+                    curs.execute("SELECT * FROM citybikes.stations;")
                     db_query_results = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
@@ -108,14 +109,14 @@ def station_data_to_edw():
             with DBConnection(db_creds()).conn as conn:
                 try:
                     with conn.cursor() as curs:
-                        query_string = "INSERT INTO citybikes.stationraw (" + columns + ") VALUES %s;"
+                        query_string = "INSERT INTO citybikes.stations (" + columns + ") VALUES %s;"
                         curs.execute(query_string, (row,))
                 except Exception as e:
                     print(logging.error(traceback.format_exc()))
 
 def run():
-    network_data_to_edw()
-    station_data_to_edw()
+    networks_to_edw()
+    station_to_edw()
 
 if __name__ == "__main__":
     run()
