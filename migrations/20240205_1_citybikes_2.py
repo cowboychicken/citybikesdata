@@ -31,6 +31,7 @@ steps = [
             gbfs_href text,
             license text,
             ebikes text,
+            dateApiCalled timestamp,
             dateAdded timestamp default current_timestamp
         )
         """,

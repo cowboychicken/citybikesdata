@@ -23,6 +23,7 @@ def networks_to_edw():
     for update in networks_updates:
 
         df_fromjson = pd.DataFrame(update[0].get('networks'))
+        df_fromjson['dateApiCalled'] = update[2]
 
         # psql get query of network records
         db_query_results = None
