@@ -18,13 +18,16 @@ COPY ./ /code/
 # Copy pull_bitcoin_exchange_info file to the cron.d directory
 COPY /scheduler/pull_api_info /etc/cron.d/pull_api_info
 COPY /scheduler/load_to_edw /etc/cron.d/load_to_edw
+COPY /scheduler/load_to_edw /etc/cron.d/cron_driver
 
 # Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/pull_api_info
-RUN chmod 0644 /etc/cron.d/load_to_edw
+RUN chmod 0644 /etc/cron.d/pull_api_info.sh
+RUN chmod 0644 /etc/cron.d/load_to_edw.sh
+RUN chmod 0644 /etc/cron.d/cron_driver
 
 # Apply cron job
-RUN crontab /etc/cron.d/pull_api_info
+RUN crontab /etc/cron.d/cron_driver
+#RUN crontab /etc/cron.d/pull_api_info
 #RUN crontab /etc/cron.d/load_to_edw
 
 # Create the log file to be able to run tail
