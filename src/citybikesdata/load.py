@@ -35,7 +35,7 @@ def networks_to_edw():
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
-        df_fromdb = pd.DataFrame(db_query_results, columns=['id','href','name','company','location','source','gbfs_href','license','ebikes','dateAdded'])
+        df_fromdb = pd.DataFrame(db_query_results, columns=['id','href','name','company','location','source','gbfs_href','license','ebikes','dateApiCalled','dateAdded'])
 
         # to avoid unhashable errors
         df_fromdb = df_fromdb.astype(str)
@@ -88,7 +88,7 @@ def station_to_edw():
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
-        df_fromdb = pd.DataFrame(db_query_results, columns=['id', 'name', 'extra', 'latitude','longitude','timestamp','free_bikes','empty_slots','network','dateAdded'])
+        df_fromdb = pd.DataFrame(db_query_results, columns=['id', 'name', 'extra', 'latitude','longitude','timestamp','free_bikes','empty_slots','network','dateApiCalled','dateAdded'])
 
         #only get most recent records for each station
         df_fromdb = df_fromdb.drop_duplicates(subset=['id','name'], keep='last')
