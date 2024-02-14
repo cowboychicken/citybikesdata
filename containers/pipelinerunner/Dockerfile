@@ -18,7 +18,7 @@ COPY ./ /code/
 # Copy pull_bitcoin_exchange_info file to the cron.d directory
 #COPY /scheduler/pull_api_info /etc/cron.d/pull_api_info
 #COPY /scheduler/load_to_edw /etc/cron.d/load_to_edw
-COPY /scheduler/load_to_edw /etc/cron.d/cron_driver
+COPY /scheduler/cron_driver /etc/cron.d/cron_driver
 
 # Give execution rights on the cron job
 #RUN chmod 0744 /etc/cron.d/pull_api_info.sh
