@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/usr/local/bin/python /code/src/citybikesdata/transformation.py
+/usr/local/bin/python /code/src/citybikesdata/transform.py
