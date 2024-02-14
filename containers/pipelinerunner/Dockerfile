@@ -25,7 +25,7 @@ RUN chmod 0644 /etc/cron.d/load_to_edw
 
 # Apply cron job
 RUN crontab /etc/cron.d/pull_api_info
-RUN crontab /etc/cron.d/load_to_edw
+#RUN crontab /etc/cron.d/load_to_edw
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
