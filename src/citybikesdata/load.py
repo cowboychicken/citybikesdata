@@ -10,6 +10,7 @@ from citybikesdata.utils.db_config import get_db_creds as db_creds
 # Processing CityBikes EDL 
 def networks_to_edw():
 
+    columns=['id','href','name','company','location','source','gbfs_href','license','ebikes','dateApiCalled','dateAdded']
     networks_updates = None
     with DBConnection(db_creds()).conn as conn:
             try:
@@ -24,37 +25,35 @@ def networks_to_edw():
     for update in networks_updates:
     
         df_fromjson = pd.DataFrame(update[0].get('networks'))
-        df_fromjson['dateApiCalled'] = update[2]
-
         # psql get query of network records
         db_query_results = None
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.networks;")
+                    curs.execute("SELECT " + ','.join(columns) + " FROM citybikes.networks;")
                     db_query_results = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
-        df_fromdb = pd.DataFrame(db_query_results, columns=['id','href','name','company','location','source','gbfs_href','license','ebikes','dateApiCalled','dateAdded'])
+        df_fromdb = pd.DataFrame(db_query_results, columns=columns)
 
         # to avoid unhashable errors
         df_fromdb = df_fromdb.astype(str)
         df_fromjson = df_fromjson.astype(str)
-
+       
         df_differences = df_fromjson.merge(df_fromdb, how='left')
-
         df_differences = df_differences.query('dateAdded.isnull()')
         df_differences = df_differences[df_fromjson.columns]
+        df_differences['dateApiCalled'] = update[2]
 
         tuples = [tuple(x) for x in df_differences.to_numpy()]
-        columns = ','.join(list(df_differences.columns))
+        df_differences_columns = ','.join(list(df_differences.columns))
 
         for row in tuples:
             with DBConnection(db_creds()).conn as conn:
                 try:
                     with conn.cursor() as curs:
-                        query_string = "INSERT INTO citybikes.networks (" + columns + ") VALUES %s;"
+                        query_string = "INSERT INTO citybikes.networks (" + df_differences_columns + ") VALUES %s;"
                         curs.execute(query_string, (row,))
                 except Exception as e:
                     print(logging.error(traceback.format_exc()))
@@ -63,6 +62,9 @@ def networks_to_edw():
 
 
 def station_to_edw():
+
+    columns=['id', 'name', 'extra', 'latitude','longitude','timestamp','free_bikes','empty_slots','network','dateApiCalled','dateAdded']
+
     station_updates = None 
     with DBConnection(db_creds()).conn as conn:
             try:
@@ -77,7 +79,7 @@ def station_to_edw():
     for update in station_updates:
         df_fromjson = pd.DataFrame(update[0]['network'].get('stations'))
         df_fromjson['network'] = 'fortworth'
-        df_fromjson['dateApiCalled'] = update[2]
+
 
         db_query_results = None
 
@@ -89,7 +91,7 @@ def station_to_edw():
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
-        df_fromdb = pd.DataFrame(db_query_results, columns=['id', 'name', 'extra', 'latitude','longitude','timestamp','free_bikes','empty_slots','network','dateApiCalled','dateAdded'])
+        df_fromdb = pd.DataFrame(db_query_results, columns=columns)
 
         #only get most recent records for each station
         df_fromdb = df_fromdb.drop_duplicates(subset=['id','name'], keep='last')
@@ -103,15 +105,16 @@ def station_to_edw():
         df_differences = df_appended.query('dateAdded.isnull()')
         df_differences = df_differences[df_fromjson.columns]
         df_differences['extra'] = df_differences['extra'].astype(str)
+        df_differences['dateApiCalled'] = update[2] # adding third column from edl
 
         tuples = [tuple(x) for x in df_differences.to_numpy()]
 
-        columns = ','.join(list(df_differences.columns))
+        df_differences_columns = ','.join(list(df_differences.columns))
         for row in tuples:
             with DBConnection(db_creds()).conn as conn:
                 try:
                     with conn.cursor() as curs:
-                        query_string = "INSERT INTO citybikes.stations (" + columns + ") VALUES %s;"
+                        query_string = "INSERT INTO citybikes.stations (" + df_differences_columns + ") VALUES %s;"
                         curs.execute(query_string, (row,))
                 except Exception as e:
                     print(logging.error(traceback.format_exc()))

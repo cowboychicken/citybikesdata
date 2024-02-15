@@ -32,6 +32,7 @@ def run():
             with conn.cursor() as curs:
                 curs.execute("INSERT INTO citybikes.edl (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_networks()),"networks" ))
                 curs.execute("INSERT INTO citybikes.edl (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_stations_for("fortworth")),"fortworth" ))
+                print("[extract.run()] CityBikes API response stored")
         except Exception as e:
             print(logging.error(traceback.format_exc()))
 

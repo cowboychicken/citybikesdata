@@ -26,13 +26,19 @@ steps = [
             href text,
             name text,
             company text,
+            company_formatted text,
             location text,
+            location_city text,
+            location_country text,
+            location_latitude text,
+            location_longitude text,
             source text,
             gbfs_href text,
             license text,
             ebikes text,
             dateApiCalled timestamp,
-            dateAdded timestamp default current_timestamp
+            dateAdded timestamp default current_timestamp,
+            unique(id)
         )
         """,
         "DROP TABLE citybikes.networks",
