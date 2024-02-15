@@ -13,7 +13,8 @@ steps = [
         (
             responsejson jsonb,
             messagesent text,
-            dateAdded timestamp default current_timestamp
+            processed boolean NOT NULL DEFAULT FALSE;
+            dateAdded timestamp DEFAULT current_timestamp
         )
         """,
         "DROP TABLE citybikes.edl",
@@ -26,18 +27,13 @@ steps = [
             href text,
             name text,
             company text,
-            company_formatted text,
             location text,
-            location_city text,
-            location_country text,
-            location_latitude text,
-            location_longitude text,
             source text,
             gbfs_href text,
             license text,
             ebikes text,
             dateApiCalled timestamp,
-            dateAdded timestamp default current_timestamp,
+            dateAdded timestamp DEFAULT current_timestamp,
             unique(id)
         )
         """,
@@ -57,11 +53,11 @@ steps = [
             empty_slots int,
             network text,
             dateApiCalled timestamp,
-            dateAdded timestamp default current_timestamp
+            dateAdded timestamp DEFAULT current_timestamp
         )
         """,
         "DROP TABLE citybikes.stations",
-    ),
+    )
 ]
 
 
