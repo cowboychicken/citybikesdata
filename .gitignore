@@ -80,3 +80,6 @@ override.tf.json
 terraform.rc
 Footer
 
+# Ignore my to do list..
+README-TODO*
+

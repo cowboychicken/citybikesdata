@@ -1,29 +1,19 @@
-DE project using Citybikes API 
+# CityBikes Data Dashboard
 
-Infrastructure and Tools:
-    - Airflow
-    - Docker
-    - Pandas
-    - Metabase
-    - AWS ec2
-    - Terraform
-    - Github Actions
+An ELT pipeline designed to fetch data from the [CityBikes API](https://api.citybik.es/v2/) and intergrate it into an analytical dashboard.
 
+## Architecture
 
-Future Work:
- - Pass in db credentials using env variables for cron scripts
- - Add db back up and rebuild functionality (dump,migration)
- - Fix pipelinerunner container logs
- - Clean up etl scripts to output better logs
+A PostgreSQL database is used for both a data-lake and data-warehouse. While this approach may not align with conventional industry practices, it served as an educational exploration of some fundamental data engineering concepts.
 
+All ETL scripts were written in Python + Pandas. Metabase was used for the dashboards. Airflow was originnaly used for scheduling but has been replaced by Cron due to resource constraints. (Both implementations are saved here, an Airflow instance simply needs to be spun up)
+Docker was used to run all components in containers. 
 
+![Pipeline](resources/images/citybikes_pipeline_diagram.png)
 
-Immediate To-Do:
-    - ETL
-        - flatten location column 
-        - Clean up data - parse/trim, replace nan's, 
-        - Convert lat/long to float types
-        - make new migration to alter table with new columns from transformations
-        - make etl scripts so that log shows errors. currently will not record anything if any scripts break
-        
+## Infrastructure
+
+An AWS ec2 instance is used to mimic a production enviroment. Terraform is used to store all the ec2 settings and allows us to quickly spool up a new instance or tear down existing ones. Github is used for version control and repository hosting. Github Actions is used to trigger CD and CI.
+
+![infra](resources/images/citybikes_infra_diagram.png)
 
