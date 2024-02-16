@@ -19,7 +19,7 @@ def networks_in_edw():
     with DBConnection(db_creds()).conn as conn:
         try:
             with conn.cursor() as curs:
-                curs.execute("SELECT * FROM citybikes.networks;")
+                curs.execute("SELECT " + ','.join(columns) + " FROM citybikes.networks;")
                 query_results = curs.fetchall()
         except Exception as e:
             print(logging.error(traceback.format_exc()))
@@ -45,8 +45,7 @@ def networks_in_edw():
                     curs.execute(query_string, (row,))
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
-    print("done")
-
+    print("[transform.networks_in_edw()] 'company' and 'location' formatting complete.")
 def run():
     networks_in_edw()
 

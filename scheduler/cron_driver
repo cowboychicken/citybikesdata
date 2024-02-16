@@ -1,3 +1,3 @@
 SHELL=/bin/bash
 HOME=/
-*/1 * * * * /etc/cron.d/pull_api_info.sh && /etc/cron.d/load_to_edw.sh && /etc/cron.d/transform_edw.sh >> /var/log/cron.log
+*/1 * * * * /etc/cron.d/pull_api_info.sh >> /var/log/cron.log && /etc/cron.d/load_to_edw.sh >> /var/log/cron.log && /etc/cron.d/transform_edw.sh >> /var/log/cron.log
