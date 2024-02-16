@@ -11,20 +11,22 @@ from citybikesdata.utils.db_config import get_db_creds as db_creds
 def networks_to_edw():
 
     columns=['id','href','name','company','location','source','gbfs_href','license','ebikes','dateApiCalled','dateAdded']
+    
+    # query edl for network-api responses that haven't been proccessed yet. 
     networks_updates = None
     with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='networks';")
+                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='networks' AND NOT processed;")
                     networks_updates = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
-    # response == a DB ENTRY/ROW, so need to choose correct index/tuple(column), then select key from resulting dict
+    # each response == a table ENTRY/ROW, so need to choose correct index/tuple(column), then select key from resulting dict
     file_count = 0
     for update in networks_updates:
     
-        df_fromjson = pd.DataFrame(update[0].get('networks'))
+        df_fromjson = pd.DataFrame(update[1].get('networks'))
         # psql get query of network records
         db_query_results = None
         with DBConnection(db_creds()).conn as conn:
@@ -44,19 +46,22 @@ def networks_to_edw():
         df_differences = df_fromjson.merge(df_fromdb, how='left')
         df_differences = df_differences.query('dateAdded.isnull()')
         df_differences = df_differences[df_fromjson.columns]
-        df_differences['dateApiCalled'] = update[2]
+        df_differences['dateApiCalled'] = update[4]
 
         tuples = [tuple(x) for x in df_differences.to_numpy()]
         df_differences_columns = ','.join(list(df_differences.columns))
-
-        for row in tuples:
-            with DBConnection(db_creds()).conn as conn:
-                try:
-                    with conn.cursor() as curs:
+        
+        with DBConnection(db_creds()).conn as conn:
+            try:
+                with conn.cursor() as curs:
+                    for row in tuples:
                         query_string = "INSERT INTO citybikes.networks (" + df_differences_columns + ") VALUES %s;"
                         curs.execute(query_string, (row,))
-                except Exception as e:
-                    print(logging.error(traceback.format_exc()))
+                    curs.execute("UPDATE citybikes.edl SET processed = TRUE WHERE id = %s", (update[0],))
+            except Exception as e:
+                print(logging.error(traceback.format_exc()))
+
+
         file_count += 1
     print("[load.networks_to_edw()] " + str(file_count) + " files proccessed.")
 
@@ -69,7 +74,7 @@ def station_to_edw():
     with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='fortworth';")
+                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='fortworth' AND NOT processed;")
                     station_updates = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
@@ -77,7 +82,7 @@ def station_to_edw():
     
     file_count = 0
     for update in station_updates:
-        df_fromjson = pd.DataFrame(update[0]['network'].get('stations'))
+        df_fromjson = pd.DataFrame(update[1]['network'].get('stations'))
         df_fromjson['network'] = 'fortworth'
 
 
@@ -105,19 +110,21 @@ def station_to_edw():
         df_differences = df_appended.query('dateAdded.isnull()')
         df_differences = df_differences[df_fromjson.columns]
         df_differences['extra'] = df_differences['extra'].astype(str)
-        df_differences['dateApiCalled'] = update[2] # adding third column from edl
+        df_differences['dateApiCalled'] = update[4] # adding third column from edl
 
         tuples = [tuple(x) for x in df_differences.to_numpy()]
 
         df_differences_columns = ','.join(list(df_differences.columns))
-        for row in tuples:
-            with DBConnection(db_creds()).conn as conn:
-                try:
-                    with conn.cursor() as curs:
+        
+        with DBConnection(db_creds()).conn as conn:
+            try:
+                with conn.cursor() as curs:
+                    for row in tuples:
                         query_string = "INSERT INTO citybikes.stations (" + df_differences_columns + ") VALUES %s;"
                         curs.execute(query_string, (row,))
-                except Exception as e:
-                    print(logging.error(traceback.format_exc()))
+                    curs.execute("UPDATE citybikes.edl SET processed = TRUE WHERE id = %s", (update[0],))               
+            except Exception as e:
+                print(logging.error(traceback.format_exc()))
         file_count += 1
     print(print("[load.stations_to_edw()] " + str(file_count) + " files proccessed."))
 

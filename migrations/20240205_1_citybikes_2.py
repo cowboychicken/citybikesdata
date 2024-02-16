@@ -11,9 +11,10 @@ steps = [
         """
         CREATE TABLE citybikes.edl
         (
+            id SERIAL PRIMARY KEY,
             responsejson jsonb,
             messagesent text,
-            processed boolean NOT NULL DEFAULT FALSE;
+            processed boolean NOT NULL DEFAULT FALSE,
             dateAdded timestamp DEFAULT current_timestamp
         )
         """,
