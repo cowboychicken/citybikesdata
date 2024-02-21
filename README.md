@@ -17,3 +17,4 @@ An AWS ec2 instance is used to mimic a production environment. Terraform is used
 
 ![infra](resources/images/citybikes_infra_diagram.png)
 
+

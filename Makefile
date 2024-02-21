@@ -21,20 +21,20 @@ sh:
 ####################################################################################################################
 # Testing, auto formatting, type checks, & Lint checks
 
-pytest:
-	docker exec pipelinerunner pytest -p no:warnings -v /opt/airflow/tests
+isort:
+	docker exec pipelinerunner isort .
 
 format:
 	docker exec pipelinerunner python -m black -S --line-length 79 .
-
-isort:
-	docker exec pipelinerunner isort .
 
 type:
 	docker exec pipelinerunner mypy --ignore-missing-imports /opt/airflow
 
 lint: 
 	docker exec pipelinerunner flake8 /opt/airflow/dags
+
+pytest:
+	docker exec pipelinerunner pytest -p no:warnings -v /opt/airflow/tests
 
 ci: isort format type lint pytest
 
