@@ -1,41 +1,44 @@
-import requests
+import json
 import logging
 import traceback
-import json
+
+import requests
 
 from citybikesdata.utils.db import DBConnection
 from citybikesdata.utils.db_config import get_db_creds as db_creds
 
+# Main API Endpoint
+URL = "https://api.citybik.es/v2/networks"
 
-url = "https://api.citybik.es/v2/networks"
 
-
-def get_networks():
+def send_api_request(request):
     try:
-        response = requests.request('get', url)
+        response = requests.request('get', request)
     except requests.ConnectionError as ce:
         logging.error(f"There was an error with the request, {ce}")
-    return response.json()
+    return response
 
 
-def get_stations_for(network_id):
-    try:
-        response = requests.request('get', url + "/" + network_id)
-    except requests.ConnectionError as ce:
-        logging.error(f"There was an error with the request, {ce}")
-    return response.json()
+def get_networks() -> json:
+    return send_api_request(URL).json()
 
 
-def run():
+def get_stations_for(network_id) -> json:
+    return send_api_request(URL + "/" + network_id).json()
+
+
+def load_response_to_edl(response: json, request: str):
     with DBConnection(db_creds()).conn as conn:
         try:
             with conn.cursor() as curs:
-                curs.execute("INSERT INTO citybikes.edl (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_networks()),"networks" ))
-                curs.execute("INSERT INTO citybikes.edl (responsejson, messagesent) VALUES (%s, %s)", (json.dumps(get_stations_for("fortworth")),"fortworth" ))
-                print("[extract.run()] CityBikes API response stored")
+                curs.execute(
+                    "INSERT INTO citybikes.edl (responsejson, messagesent) VALUES (%s, %s)",
+                    (json.dumps(response), request),
+                )
         except Exception as e:
             print(logging.error(traceback.format_exc()))
 
 
 if __name__ == "__main__":
-    run()
+    load_response_to_edl(get_networks(), "networks")
+    load_response_to_edl(get_stations_for("fortworth"), "fortworth")
