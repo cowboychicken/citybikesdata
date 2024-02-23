@@ -13,7 +13,7 @@ Docker was used to run all components in containers.
 
 ## Infrastructure
 
-An AWS ec2 instance is used to mimic a production environment. Terraform is used to store all the ec2 settings and allows us to quickly spool up a new instance or tear down existing ones. Github is used for version control and repository hosting. Github Actions is used to trigger CD and CI.
+An AWS ec2 instance is used to mimic a production environment. Terraform is used to store all the ec2 settings and allows us to quickly spool up a new instance or tear down existing ones. Github is used for version control and repository hosting. Github Actions is used to trigger CI/CD workflows.
 
 ![infra](resources/images/citybikes_infra_diagram.png)
 

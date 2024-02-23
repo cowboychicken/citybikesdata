@@ -30,7 +30,6 @@ def get_stations_for(network_id) -> json:
 
 
 def load_response_to_edl(response: json, request: str):
-    print("response",json.dumps(response))
     with DBConnection(db_creds()).conn as conn:
         try:
             with conn.cursor() as curs:
