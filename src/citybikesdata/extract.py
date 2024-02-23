@@ -8,26 +8,29 @@ from citybikesdata.utils.db import DBConnection
 from citybikesdata.utils.db_config import get_db_creds as db_creds
 
 # Main API Endpoint
-URL = "https://api.citybik.es/v2/networks"
+API_URL = "https://api.citybik.es/v2/networks"
 
 
 def send_api_request(request):
     try:
         response = requests.request('get', request)
+        print("response",type(response))
     except requests.ConnectionError as ce:
         logging.error(f"There was an error with the request, {ce}")
     return response
 
 
-def get_networks() -> json:
-    return send_api_request(URL).json()
+def get_networks() -> json:    
+    return send_api_request(API_URL).json()
+
 
 
 def get_stations_for(network_id) -> json:
-    return send_api_request(URL + "/" + network_id).json()
+    return send_api_request(API_URL + "/" + network_id).json()
 
 
 def load_response_to_edl(response: json, request: str):
+    print("response",json.dumps(response))
     with DBConnection(db_creds()).conn as conn:
         try:
             with conn.cursor() as curs:

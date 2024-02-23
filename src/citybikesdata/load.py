@@ -42,7 +42,8 @@ def networks_to_edw():
         # to avoid unhashable errors
         df_fromdb = df_fromdb.astype(str)
         df_fromjson = df_fromjson.astype(str)
-       
+        #   temporary to skip empty api responses and identify id's
+        if df_fromjson.empty:continue
         df_differences = df_fromjson.merge(df_fromdb, how='left')
         df_differences = df_differences.query('dateAdded.isnull()')
         df_differences = df_differences[df_fromjson.columns]
