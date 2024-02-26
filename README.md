@@ -1,6 +1,6 @@
 # CityBikes Data Dashboard
 
-An ELT pipeline designed to fetch data from the [CityBikes API](https://api.citybik.es/v2/) and integrate it into an analytical dashboard.
+An ETL pipeline designed to fetch data from the [CityBikes API](https://api.citybik.es/v2/) and integrate it into an analytical dashboard.
 
 ## Architecture
 
