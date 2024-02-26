@@ -1,8 +1,90 @@
 
-<iframe
-    src="http://44.208.182.251:3000/public/dashboard/0a58d353-9f90-4d3d-8717-a7fd55069a25"
-    frameborder="0"
-    width="100%"
-    height="100%"
-    allowtransparency
-></iframe>
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Simple Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .content {
+            padding: 20px 0;
+            text-align: center;
+        }
+        .content img {
+            max-width: 100%;
+            height: auto;
+        }
+        .paragraph {
+            text-align: left;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CityBikes Data Dashboard</h1>
+            <a href="https://github.com/cowboychicken/citybikesdata">github.com/cowboychicken/citybikes</a>
+        </div>
+        <div class="content">
+            <div class="paragraph">
+                <p>An ELT pipeline designed to fetch data from the CityBikes API and integrate it into an analytical dashboard.</p>
+
+                <h2>Architecture</h2>
+                <p>A PostgreSQL database is used for both a data-lake and data-warehouse. While this approach may not align with conventional industry practices, it served as an educational exploration of some fundamental data engineering concepts</p>
+                <p>All ETL scripts were written in Python + Pandas. Metabase was used for the dashboards. Airflow was originally used for scheduling but has been replaced by Cron due to resource constraints. (Both implementations are saved here, an Airflow instance simply needs to be spun up) Docker was used to run all components in containers.</p>
+                <img src="https://raw.githubusercontent.com/cowboychicken/citybikesdata/main/resources/images/citybikes_pipeline_diagram.png" alt="citybikes_pipeline_diagram">
+
+                <h2>Infrastructure</h2>
+                <p>An AWS ec2 instance is used to mimic a production environment. Terraform is used to store all the ec2 settings and allows us to quickly spool up a new instance or tear down existing ones. Github is used for version control and repository hosting. Github Actions is used to trigger CI/CD workflows.</p>
+                <img src="https://raw.githubusercontent.com/cowboychicken/citybikesdata/main/resources/images/citybikes_infra_diagram.png" alt="citybikes_infra_diagram">
+
+            </div>
+            
+        </div>
+        <div class="footer">
+            <p></p>
+            <iframe
+                src="http://44.208.182.251:3000/public/dashboard/0a58d353-9f90-4d3d-8717-a7fd55069a25"
+                frameborder="0"
+                width="100%"
+                height="100%"
+                allowtransparency
+            ></iframe>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+
+
