@@ -13,7 +13,7 @@
             background-color: #f0f0f0;
         }
         .container {
-            max-width: 800px;
+            max-width: 80%;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
@@ -28,6 +28,7 @@
         .content {
             padding: 20px 0;
             text-align: center;
+            height: auto;
         }
         .content img {
             max-width: 100%;
@@ -35,6 +36,9 @@
         }
         .paragraph {
             text-align: left;
+        }
+        .dashboard {
+            height: 800px
         }
         .footer {
             text-align: center;
@@ -47,7 +51,7 @@
     <div class="container">
         <div class="header">
             <h1>CityBikes Data Dashboard</h1>
-            <a href="https://github.com/cowboychicken/citybikesdata">github.com/cowboychicken/citybikes</a>
+            <a href="https://github.com/cowboychicken/citybikesdata">github.com/cowboychicken/citybikes</a><br>
             <a href="http://plzinterviewme.com/bikes/info.html">more info on pipeline</a>
         </div>
         <div class="content">
@@ -55,18 +59,27 @@
                 <p>Near-Real-Time Status of Bike Sharing Stations in Fort Worth</p>
 
                 <h2>Stations</h2>
-                <iframe
-                    src="http://44.208.182.251:3000/public/dashboard/0a58d353-9f90-4d3d-8717-a7fd55069a25"
+                <div class="dashboard">
+                    <iframe
+                    src="http://44.208.182.251:3000/public/dashboard/572dc627-ccd6-4da1-8310-081cc7de49f5"
                     frameborder="0"
                     width="100%"
                     height="100%"
                     allowtransparency
                 ></iframe>
+
+                </div>
+                
                
                 <h2>Networks</h2>
-                <p>An AWS ec2 instance is used to mimic a production environment. Terraform is used to store all the ec2 settings and allows us to quickly spool up a new instance or tear down existing ones. Github is used for version control and repository hosting. Github Actions is used to trigger CI/CD workflows.</p>
-                <img src="https://raw.githubusercontent.com/cowboychicken/citybikesdata/main/resources/images/citybikes_infra_diagram.png" alt="citybikes_infra_diagram">
-
+                <iframe
+                    src="http://44.208.182.251:3000/public/dashboard/4a991aa5-0750-410c-b14e-312258e34bed"
+                    frameborder="0"
+                    width="100%"
+                    height="100%"
+                    allowtransparency
+                ></iframe>
+         
             </div>
             
             
