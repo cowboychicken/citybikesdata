@@ -36,6 +36,9 @@
         .paragraph {
             text-align: left;
         }
+        .dashboard {
+            height: 1000px
+        }
         .footer {
             text-align: center;
             padding: 20px 0;
@@ -46,7 +49,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>CityBikes Data Dashboard</h1>
+            <h1>CityBikes Dashboard</h1>
             <a href="https://github.com/cowboychicken/citybikesdata">github.com/cowboychicken/citybikes</a><br><br>
             <a href="http://plzinterviewme.com/bikes">back to dashboard</a>
         </div>
@@ -64,6 +67,16 @@
                 <img src="https://raw.githubusercontent.com/cowboychicken/citybikesdata/main/resources/images/citybikes_infra_diagram.png" alt="citybikes_infra_diagram">
 
             </div>
+            <div class="dashboard">
+                <iframe
+                    src="http://44.208.182.251:3000/public/dashboard/17f63e71-9e71-44ec-9eef-7b5a95b55613"
+                    frameborder="0"
+                    width="100%"
+                    height="100%"
+                    allowtransparency
+                ></iframe>
+
+            </div>
         </div>
         <div class="footer">
             <p></p>
@@ -72,6 +85,3 @@
     
 </body>
 </html>
-
-
-
