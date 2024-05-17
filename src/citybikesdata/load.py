@@ -61,8 +61,6 @@ def networks_to_edw():
                     curs.execute("UPDATE citybikes.edl SET processed = TRUE WHERE id = %s", (update[0],))
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
-
-
         file_count += 1
     print("[load.networks_to_edw()] " + str(file_count) + " files proccessed.")
 

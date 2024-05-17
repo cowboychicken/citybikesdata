@@ -34,8 +34,7 @@ steps = [
             license text,
             ebikes text,
             dateApiCalled timestamp,
-            dateAdded timestamp DEFAULT current_timestamp,
-            unique(id)
+            dateAdded timestamp DEFAULT current_timestamp
         )
         """,
         "DROP TABLE citybikes.networks",
