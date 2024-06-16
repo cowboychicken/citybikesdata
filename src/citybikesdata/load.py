@@ -51,7 +51,7 @@ def networks_to_edw():
 
         tuples = [tuple(x) for x in df_differences.to_numpy()]
         df_differences_columns = ','.join(list(df_differences.columns))
-        
+        print("[load.networks_to_edw()] " + str(file_count) + " files proccessed.")
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
@@ -114,7 +114,7 @@ def station_to_edw():
         tuples = [tuple(x) for x in df_differences.to_numpy()]
 
         df_differences_columns = ','.join(list(df_differences.columns))
-        
+        print(print("[load.stations_to_edw()] " + str(file_count) + " files proccessed."))
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
