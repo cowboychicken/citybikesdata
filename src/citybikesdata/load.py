@@ -12,20 +12,20 @@ def networks_to_edw():
 
     columns=['id','href','name','company','location','source','gbfs_href','license','ebikes','dateApiCalled','dateAdded']
     
-    # query edl for network-api responses that haven't been proccessed yet. 
+    # query edl for network-    api responses that haven't been proccessed yet. 
     networks_updates = None
     print("[load.networks_to_edw()] querying db....")
     with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='networks' AND NOT processed;")
+                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='networks' AND NOT processed limit 500;")
                     networks_updates = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
 
     # each response == a table ENTRY/ROW, so need to choose correct index/tuple(column), then select key from resulting dict
     file_count = 0
-    print("[load.networks_to_edw()] looping results from db....")
+    print("[load.networks_to_edw()] looping through results from db....")
     for update in networks_updates:
     
         df_fromjson = pd.DataFrame(update[1].get('networks'))
@@ -53,7 +53,6 @@ def networks_to_edw():
 
         tuples = [tuple(x) for x in df_differences.to_numpy()]
         df_differences_columns = ','.join(list(df_differences.columns))
-        print("[load.networks_to_edw()] " + str(file_count) + " files proccessed.")
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
@@ -72,20 +71,20 @@ def station_to_edw():
     columns=['id', 'name', 'extra', 'latitude','longitude','timestamp','free_bikes','empty_slots','network','dateApiCalled','dateAdded']
 
     station_updates = None 
+    print("[load.stations_to_edw()] querying db....")
     with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
-                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='fortworth' AND NOT processed;")
+                    curs.execute("SELECT * FROM citybikes.edl WHERE messagesent='fortworth' AND NOT processed limit 500;")
                     station_updates = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
-
     
     file_count = 0
+    print("[load.stations_to_edw()] looping through results from db....")
     for update in station_updates:
         df_fromjson = pd.DataFrame(update[1]['network'].get('stations'))
         df_fromjson['network'] = 'fortworth'
-
 
         db_query_results = None
 
@@ -116,7 +115,6 @@ def station_to_edw():
         tuples = [tuple(x) for x in df_differences.to_numpy()]
 
         df_differences_columns = ','.join(list(df_differences.columns))
-        print(print("[load.stations_to_edw()] " + str(file_count) + " files proccessed."))
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
@@ -127,7 +125,7 @@ def station_to_edw():
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
         file_count += 1
-    print(print("[load.stations_to_edw()] " + str(file_count) + " files proccessed."))
+    print("[load.stations_to_edw()] " + str(file_count) + " files proccessed.")
 
 def run():
     networks_to_edw()
