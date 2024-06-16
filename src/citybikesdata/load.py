@@ -14,6 +14,7 @@ def networks_to_edw():
     
     # query edl for network-api responses that haven't been proccessed yet. 
     networks_updates = None
+    print("[load.networks_to_edw()] querying db....")
     with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
@@ -24,6 +25,7 @@ def networks_to_edw():
 
     # each response == a table ENTRY/ROW, so need to choose correct index/tuple(column), then select key from resulting dict
     file_count = 0
+    print("[load.networks_to_edw()] looping results from db....")
     for update in networks_updates:
     
         df_fromjson = pd.DataFrame(update[1].get('networks'))
