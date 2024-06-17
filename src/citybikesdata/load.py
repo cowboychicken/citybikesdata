@@ -12,7 +12,6 @@ def networks_to_edw():
 
     columns=['id','href','name','company','location','source','gbfs_href','license','ebikes','dateApiCalled','dateAdded']
     
-    # query edl for network-    api responses that haven't been proccessed yet. 
     networks_updates = None
     networks_updates_count = None
 
@@ -30,6 +29,7 @@ def networks_to_edw():
     file_count = 0
     
     while file_count < networks_updates_count:
+
         with DBConnection(db_creds()).conn as conn:
             try:
                 with conn.cursor() as curs:
@@ -40,6 +40,7 @@ def networks_to_edw():
         
         # each response == a table ENTRY/ROW, so need to choose correct index/tuple(column), then select key from resulting dict
         for update in networks_updates:
+            file_count += 1
             df_fromjson = pd.DataFrame(update[1].get('networks'))
             # psql get query of network records
             db_query_results = None
@@ -65,6 +66,7 @@ def networks_to_edw():
 
             tuples = [tuple(x) for x in df_differences.to_numpy()]
             df_differences_columns = ','.join(list(df_differences.columns))
+            
             with DBConnection(db_creds()).conn as conn:
                 try:
                     with conn.cursor() as curs:
@@ -73,8 +75,9 @@ def networks_to_edw():
                             curs.execute(query_string, (row,))
                         curs.execute("UPDATE citybikes.edl SET processed = TRUE WHERE id = %s", (update[0],))
                 except Exception as e:
+                    print(e)
                     print(logging.error(traceback.format_exc()))
-            file_count += 1
+            
         print("[load.networks_to_edw()] " + str(file_count) + " files proccessed.")
 
 
@@ -106,10 +109,9 @@ def station_to_edw():
                     station_updates = curs.fetchall()
             except Exception as e:
                 print(logging.error(traceback.format_exc()))
-
         
         for update in station_updates:
-            
+            file_count += 1
             df_fromjson = pd.DataFrame(update[1]['network'].get('stations'))
             df_fromjson['network'] = 'fortworth'
 
@@ -150,8 +152,9 @@ def station_to_edw():
                             curs.execute(query_string, (row,))
                         curs.execute("UPDATE citybikes.edl SET processed = TRUE WHERE id = %s", (update[0],))               
                 except Exception as e:
+                    print(e)
                     print(logging.error(traceback.format_exc()))
-            file_count += 1
+            
         print("[load.stations_to_edw()] " + str(file_count) + " files proccessed.")
 
 def run():
