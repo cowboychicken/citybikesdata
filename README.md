@@ -2,12 +2,13 @@
 
 An interactive dashboard that displays public bike sharing availability in the user's area, powered by a simple ETL pipeline that collects data from the [CityBikes API](https://api.citybik.es/v2/).
 
-## Instructions (to run locally)
+## Instructions
 
-### Prerequisites to run locally:
+### To run locally
+Prerequisites to run locally:
 1. [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-2. [Github account](https://github.com/)
-3. [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
+2. [Docker](https://docs.docker.com/engine/install/)
+3. [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
 
 Clone repo and run following commands to spin up docker containers:
 ```bash
@@ -19,12 +20,34 @@ OR use this simple make command:
 ```bash
 make up
 ```
-Pipeline should automatically start running in the 'pipelinerunner' container. 
+Pipeline will automatically start running in 'pipelinerunner' container. 
 Confirm container statuses using:
 ```bash
 docker ps
 ```
-To use Metabase instance, navigate to [http:localhost:3000](http:localhost:3000)
+To use Metabase instance and start building dashboard, navigate to [http:localhost:3000](http:localhost:3000)
+
+### To run on cloud (ec2)
+Prerequisites to run using ec2 and terraform:
+1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+2. [Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+3. [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) 
+
+Run the following commands to spin up ec2 instance:
+
+```shell
+terraform -chdir=./terraform init
+terraform -chdir=./terraform apply 
+```
+
+If successful, the same containers that were running locally should now be running on the ec2 instance. 
+Thus you can navigate to http:_YourEc2AddressHere_:3000 to access the cloud's metabase instance. 
+
+If not working, most likely one of the 'setup' steps from 'main.tf' (line 123-153) did not complete. 
+Use the following make command to start ssh session with your ec2 instance and troubleshoot and rerun relevant commands. 
+```bash
+make ssh-ec2
+```
 
 ## Architecture
 
