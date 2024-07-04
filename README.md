@@ -1,6 +1,6 @@
 # CityBikes Data Dashboard
 
-An interactive dashboard that displays public bike sharing availability in the user's area, powered by a simple ETL pipeline that collects data from the [CityBikes API](https://api.citybik.es/v2/).
+An interactive dashboard that displays local public bike sharing availability, powered by a simple ETL pipeline that collects data from the [CityBikes API](https://api.citybik.es/v2/).
 
 ## Instructions
 
