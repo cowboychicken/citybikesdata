@@ -6,11 +6,10 @@ An interactive dashboard that displays local public bike sharing availability, p
 
 ### To run locally
 Prerequisites to run locally:
-1. [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-2. [Docker](https://docs.docker.com/engine/install/)
-3. [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
+1. [Docker](https://docs.docker.com/engine/install/)
+2. [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
 
-Clone repo and run following commands to spin up docker containers:
+Clone repo and run following commands inside project folder to spin up docker containers:
 ```bash
 docker compose --env-file env up --build -d
 sleep 15
@@ -28,10 +27,9 @@ docker ps
 To use Metabase instance and start building dashboard, navigate to [http:localhost:3000](http:localhost:3000)
 
 ### To run on cloud (ec2)
-Prerequisites to run using ec2 and terraform:
+Prerequisites to run on ec2 and terraform:
 1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-2. [Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
-3. [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) 
+2. [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) 
 
 Run the following commands to spin up ec2 instance:
 
