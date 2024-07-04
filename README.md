@@ -5,7 +5,7 @@ An interactive dashboard that displays local public bike sharing availability, p
 ## Instructions
 
 ### To run locally
-Prerequisites to run locally:
+Prerequisites:
 1. [Docker](https://docs.docker.com/engine/install/)
 2. [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
 
@@ -27,7 +27,7 @@ docker ps
 To use Metabase instance and start building dashboard, navigate to [http:localhost:3000](http:localhost:3000)
 
 ### To run on cloud (ec2)
-Prerequisites to run on ec2 and terraform:
+Prerequisites:
 1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 2. [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) 
 
