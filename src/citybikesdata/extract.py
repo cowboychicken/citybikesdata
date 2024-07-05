@@ -14,15 +14,14 @@ API_URL = "https://api.citybik.es/v2/networks"
 def send_api_request(request):
     try:
         response = requests.request('get', request)
-        print("response",type(response))
+        print("response", type(response))
     except requests.ConnectionError as ce:
         logging.error(f"There was an error with the request, {ce}")
     return response
 
 
-def get_networks() -> json:    
+def get_networks() -> json:
     return send_api_request(API_URL).json()
-
 
 
 def get_stations_for(network_id) -> json:

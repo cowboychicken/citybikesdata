@@ -11,14 +11,14 @@ Prerequisites:
 
 Clone repo and run following commands inside project folder to spin up docker containers:
 ```bash
-docker compose --env-file env up --build -d
-sleep 15
-docker exec pipelinerunner yoyo develop --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations
-```
-OR use this simple make command:
-```bash
+docker compose --env-file env up --build -d # starts containers
+sleep 15    # wait for containers to finish starting
+docker exec pipelinerunner yoyo develop --no-config-file --database postgres://postgres1:Password1@warehouse:5432/citybikes ./migrations  
+
+# OR use this simple make command:
 make up
 ```
+
 Pipeline will automatically start running in 'pipelinerunner' container. 
 Confirm container statuses using:
 ```bash
@@ -31,20 +31,20 @@ Prerequisites:
 1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 2. [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) 
 
-Run the following commands to spin up ec2 instance:
+Run the following commands from inside project folder to spin up ec2 instance:
 
 ```shell
-terraform -chdir=./terraform init
-terraform -chdir=./terraform apply 
+terraform -chdir=./terraform init   # must first initialize 
+terraform -chdir=./terraform apply  # will compare changes and ask to approve
 ```
 
 If successful, the same containers that were running locally should now be running on the ec2 instance. 
 Thus you can navigate to http:_YourEc2AddressHere_:3000 to access the cloud's metabase instance. 
 
 If not working, most likely one of the 'setup' steps from 'main.tf' (line 123-153) did not complete. 
-Use the following make command to start ssh session with your ec2 instance and troubleshoot and rerun relevant commands. 
+Use the following make command to start ssh session with your ec2 instance and troubleshoot and rerun relevant commands from the 'main.tf' file. 
 ```bash
-make ssh-ec2
+make ssh-ec2    # start ssh with ec2 instance
 ```
 
 ## Architecture
@@ -71,7 +71,8 @@ All these components are containerized using Docker and are currently running on
 Github is used for version control and repository hosting.
 Github Actions is used to automate CI/CD workflows such as consistency measures and pushing new changes to the production environment via ssh(rsync).
 Terraform is used for IaC, storing all settings and parameters for the EC2 instance. Making it easy to modify the instance when needed.
-* currently using Cron to save money as the Airflow instance was consuming too much RAM.
+
+Currently using Cron to save money as the Airflow instance was consuming too much RAM.
 
 ![infra](resources/images/citybikes_infra_diagram.png)
 

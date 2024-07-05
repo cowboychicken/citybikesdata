@@ -1,11 +1,16 @@
-import citybikesdata.extract as extract
-import citybikesdata.load as load
-
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 
+import citybikesdata.extract as extract
+import citybikesdata.load as load
 
-@dag(dag_id = "citybikes_etl", schedule_interval="*/5 * * * *", start_date=days_ago(0), catchup=False)
+
+@dag(
+    dag_id="citybikes_etl",
+    schedule_interval="*/5 * * * *",
+    start_date=days_ago(0),
+    catchup=False,
+)
 def citybikes_etl_dag():
 
     @task(task_id="load_json_to_edl")
@@ -20,9 +25,10 @@ def citybikes_etl_dag():
     def process_stations(ds=None, **kwargs):
         return load.station_to_edw()
 
-    #dummytask = extract_from_api()
-    #dummytask = process_networks()
-    #dummytask = process_stations()
+    # dummytask = extract_from_api()
+    # dummytask = process_networks()
+    # dummytask = process_stations()
     extract_from_api() >> process_networks() >> process_stations()
+
 
 citybikes_dag = citybikes_etl_dag()

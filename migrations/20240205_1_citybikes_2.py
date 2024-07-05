@@ -57,7 +57,7 @@ steps = [
         )
         """,
         "DROP TABLE citybikes.stations",
-    )
+    ),
 ]
 
 
