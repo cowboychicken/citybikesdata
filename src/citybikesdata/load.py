@@ -194,7 +194,11 @@ def run():
     networks_to_edw()
     station_to_edw('fortworth')
     station_to_edw('austin')
-
+    station_to_edw('houston')
+    station_to_edw('elpaso')
+    station_to_edw('sanantonio')
+    station_to_edw('mcallen')
+    
 
 if __name__ == "__main__":
     run()
