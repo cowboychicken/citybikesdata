@@ -43,3 +43,4 @@ def load_response_to_edl(response: json, request: str):
 if __name__ == "__main__":
     load_response_to_edl(get_networks(), "networks")
     load_response_to_edl(get_stations_for("fortworth"), "fortworth")
+    load_response_to_edl(get_stations_for("austin"), "austin")
