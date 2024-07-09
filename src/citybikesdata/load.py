@@ -31,19 +31,14 @@ def fetch_db_data(conn, table, columns, filter):
 
 
 def insert_updates(df_differences, update, table):
-    
+    # if df_differences.empty: return
+    tuples = [tuple(x) for x in df_differences.to_numpy()]
+    df_differences_columns = ','.join(list(df_differences.columns))
     with DBConnection(db_creds()).conn as conn:
         with conn.cursor() as curs:
-            if df_differences.empty == False :
-                tuples = [tuple(x) for x in df_differences.to_numpy()]
-                df_differences_columns = ','.join(list(df_differences.columns))
-                for row in tuples:
-                    query_string = f"INSERT INTO {table} ({df_differences_columns}) VALUES %s;"
-                    curs.execute(query_string, (row,))
-            curs.execute(
-                "UPDATE citybikes.edl SET processed = TRUE WHERE id = %s",
-                (update[0],),
-            )
+            for row in tuples:
+                query_string = f"INSERT INTO {table} ({df_differences_columns}) VALUES %s;"
+                curs.execute(query_string, (row,))
 
 
 def process_network_updates(update, columns):
@@ -58,7 +53,7 @@ def process_network_updates(update, columns):
     df_fromjson = df_fromjson.astype(str)
     #   temporary to skip empty api responses and identify id's
     if df_fromjson.empty:
-        return df_fromjson
+        return None
     df_differences = df_fromjson.merge(df_fromdb, how='left')
     df_differences = df_differences.query('dateAdded.isnull()')
     df_differences = df_differences[df_fromjson.columns]
@@ -120,27 +115,27 @@ def process_station_updates(update, columns, network):
     df_fromjson = pd.DataFrame(update[1]['network'].get('stations'))
     df_fromjson['network'] = network
 
-    fmt = '%Y-%m-%d %H:%M:%S.%f'
-    df_fromjson['timestamp'] = pd.to_datetime(df_fromjson['timestamp'], format='ISO8601').dt.strftime(fmt)
-
     with DBConnection(db_creds()).conn as conn:
         df_fromdb = fetch_db_data(
             conn, 'citybikes.stations', columns, filter=f"network='{network}'"
         )
-   
+
+    # only get most recent records for each station
+    df_fromdb = df_fromdb.drop_duplicates(subset=['id', 'name'], keep='last')
+
     # append records from json
     df_appended = pd.concat([df_fromdb, df_fromjson], ignore_index=True)
-    
-    df_appended['timestamp'] = pd.to_datetime(df_appended['timestamp']).dt.strftime(fmt)
+
+    # df_appended['timestamp'] = pd.to_datetime(df_appended['timestamp']).dt.strftime(fmt)
     # remove duplicates completely. (means no change since last update)
     df_appended = df_appended.drop_duplicates(
-        subset=['id','timestamp'], keep=False
+        subset=['id', 'name', 'free_bikes', 'empty_slots'], keep=False
     )
-    
+
     # isolate record from json. (dateAdded is added by DB)
     df_differences = df_appended.query('dateAdded.isnull()')
 
-    if df_differences.empty: return df_differences
+    # if df_differences.empty: return df_differences
     df_differences = df_differences[df_fromjson.columns]
     df_differences['extra'] = df_differences['extra'].astype(str)
     df_differences['dateApiCalled'] = update[4]  # adding third column from edl
@@ -201,6 +196,7 @@ def run():
     station_to_edw('elpaso')
     station_to_edw('sanantonio')
     station_to_edw('mcallen')
-    
+
+
 if __name__ == "__main__":
     run()
