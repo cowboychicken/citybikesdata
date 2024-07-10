@@ -17,3 +17,7 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SOURCE: "./"
           TARGET: ${{ secrets.REMOTE_TARGET }}
+
+# Target secret should be set to '/home/ubuntu/citybikesdata'
+# citybikesdata folder needs to be recreated under 'Ubuntu' user if ec2 is terminated. 
+#   ^ and container must be spun up again under new user/folder....

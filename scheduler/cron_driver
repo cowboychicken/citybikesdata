@@ -3,3 +3,5 @@ HOME=/
 */5 * * * * /etc/cron.d/pull_api_info.sh >> /var/log/cron.log
 
 */30 * * * *  /etc/cron.d/load_to_edw.sh >> /var/log/cron.log && /etc/cron.d/transform_edw.sh >> /var/log/cron.log
+
+0 0 * * *  /etc/cron.d/load_info_to_edw.sh >> /var/log/cron.log
