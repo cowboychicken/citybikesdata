@@ -61,6 +61,8 @@ def process_network_updates(update, columns):
         df_fromdb = fetch_db_data(
             conn, 'citybikes.networks', columns, filter=None
         )
+
+
     # to avoid unhashable errors
     df_fromdb = df_fromdb.astype(str)
     df_fromjson = df_fromjson.astype(str)
@@ -68,10 +70,15 @@ def process_network_updates(update, columns):
     #   temporary to skip empty api responses and identify id's
     if df_fromjson.empty:
         return None
+    
     df_differences = df_fromjson.merge(df_fromdb, how='left')
     df_differences = df_differences.query('dateAdded.isnull()')
     df_differences = df_differences[df_fromjson.columns]
     df_differences['dateApiCalled'] = update[2]
+    df_differences.drop('system', axis=1, inplace=True)
+    df_differences.drop('scooters', axis=1, inplace=True)
+    df_differences.drop('instances', axis=1, inplace=True)
+    
     return df_differences
 
 
@@ -133,6 +140,7 @@ def process_station_updates(update, columns, network):
 
     # parse json for 'station' info then left join with db results
     df_fromjson = pd.DataFrame(update[1]['network'].get('stations'))
+
     df_fromjson = df_fromjson.merge(df_fromdb2, how="left", on='id')
 
     # remove rows that show no change since last update
@@ -206,7 +214,7 @@ def run():
     networks_to_edw()
     station_to_edw('fortworth')
     station_to_edw('austin')
-    station_to_edw('houston')
+    #station_to_edw('houston')
     station_to_edw('elpaso')
     station_to_edw('sanantonio')
     station_to_edw('mcallen')
